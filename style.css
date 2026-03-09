@@ -71,6 +71,19 @@ header {
     font-weight: bold;
 }
 
+.about-me {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 0;
+}
+
+.about-me p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #d6d6e8;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(280px, 600px));
@@ -320,6 +333,10 @@ body.modal-open {
         padding: 30px 16px;
         row-gap: 28px;
         column-gap: 0;
+    }
+
+    .about-me {
+        margin-top: 10px;
     }
 
     .modal-content {
