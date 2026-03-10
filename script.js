@@ -9,6 +9,9 @@ const imageLightbox = document.getElementById('image-lightbox');
 const lightboxImage = document.getElementById('lightbox-image');
 const lightboxCaption = document.getElementById('lightbox-caption');
 const lightboxCloseButton = document.querySelector('.image-lightbox-close');
+const contactModal = document.getElementById('contact-modal');
+const contactLink = document.getElementById('contact-link');
+const contactModalCloseButton = document.getElementById('contact-modal-close');
 
 function getGalleryImages(galleryValue) {
     if (!galleryValue) return [];
@@ -144,17 +147,50 @@ function openProject(title, videoSrc, embedSrc, description, galleryImages) {
     }
 
     modal.classList.add('active');
-    document.body.classList.add('modal-open');
+    syncBodyModalState();
 }
 
 function closeModal() {
     modal.classList.remove('active');
-    document.body.classList.remove('modal-open');
     closeImageLightbox();
+    syncBodyModalState();
 
     modalVideo.pause();
     modalVideo.currentTime = 0;
     modalVideoEmbed.src = '';
+}
+
+function syncBodyModalState() {
+    const hasActiveModal =
+        modal.classList.contains('active') ||
+        (contactModal && contactModal.classList.contains('active'));
+
+    if (hasActiveModal) {
+        document.body.classList.add('modal-open');
+        return;
+    }
+
+    document.body.classList.remove('modal-open');
+}
+
+function openContactModal() {
+    if (!contactModal) return;
+    if (modal.classList.contains('active')) {
+        closeModal();
+    }
+    if (contactStatus) {
+        contactStatus.textContent = '';
+    }
+    contactModal.classList.add('active');
+    contactModal.setAttribute('aria-hidden', 'false');
+    syncBodyModalState();
+}
+
+function closeContactModal() {
+    if (!contactModal) return;
+    contactModal.classList.remove('active');
+    contactModal.setAttribute('aria-hidden', 'true');
+    syncBodyModalState();
 }
 
 const projects = document.querySelectorAll('.project');
@@ -191,6 +227,14 @@ modal.addEventListener('click', (event) => {
     }
 });
 
+if (contactModal) {
+    contactModal.addEventListener('click', (event) => {
+        if (event.target === contactModal) {
+            closeContactModal();
+        }
+    });
+}
+
 imageLightbox.addEventListener('click', (event) => {
     if (event.target === imageLightbox) {
         closeImageLightbox();
@@ -198,6 +242,17 @@ imageLightbox.addEventListener('click', (event) => {
 });
 
 lightboxCloseButton.addEventListener('click', closeImageLightbox);
+
+if (contactLink) {
+    contactLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        openContactModal();
+    });
+}
+
+if (contactModalCloseButton) {
+    contactModalCloseButton.addEventListener('click', closeContactModal);
+}
 
 document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
@@ -209,5 +264,105 @@ document.addEventListener('keydown', (event) => {
 
     if (modal.classList.contains('active')) {
         closeModal();
+        return;
+    }
+
+    if (contactModal && contactModal.classList.contains('active')) {
+        closeContactModal();
     }
 });
+
+const contactForm = document.getElementById('contact-form');
+const contactStatus = document.getElementById('contact-status');
+const contactNameInput = document.getElementById('contact-name');
+const contactEmailInput = document.getElementById('contact-email');
+const contactMessageInput = document.getElementById('contact-message');
+
+if (contactForm && contactStatus && contactNameInput && contactEmailInput && contactMessageInput) {
+    contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const name = contactNameInput.value.trim();
+        const email = contactEmailInput.value.trim();
+        const message = contactMessageInput.value.trim();
+        const recipient = contactForm.dataset.recipient || 'hello@example.com';
+
+        if (!name || !email || !message) {
+            contactStatus.textContent = 'Please complete all fields before sending.';
+            return;
+        }
+
+        const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
+        const body = encodeURIComponent(
+            `Name: ${name}\nEmail: ${email}\n\n${message}`
+        );
+
+        window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+        contactStatus.textContent = 'Opening your email app...';
+    });
+}
+
+const funHexButton = document.getElementById('fun-hex-button');
+let funHexClickCount = 0;
+
+function playHexAnimation(className) {
+    if (!funHexButton) return;
+    funHexButton.classList.remove('spin', 'spin-fast');
+    void funHexButton.offsetWidth;
+    funHexButton.classList.add(className);
+}
+
+function emitHexSparks() {
+    if (!funHexButton) return;
+
+    const rect = funHexButton.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const sparkCount = 68;
+
+    for (let i = 0; i < sparkCount; i += 1) {
+        const spark = document.createElement('span');
+        spark.className = 'fun-spark';
+        spark.style.left = `${centerX}px`;
+        spark.style.top = `${centerY}px`;
+
+        const angle = (Math.PI * 2 * i) / sparkCount + (Math.random() - 0.5) * 0.3;
+        const distance = 40 + Math.random() * 130;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+        const sparkSize = 2 + Math.random() * 4.5;
+        const sparkDuration = 0.9 + Math.random() * 0.9;
+        spark.style.setProperty('--dx', `${dx.toFixed(1)}px`);
+        spark.style.setProperty('--dy', `${dy.toFixed(1)}px`);
+        spark.style.setProperty('--spark-size', `${sparkSize.toFixed(1)}px`);
+        spark.style.setProperty('--spark-duration', `${sparkDuration.toFixed(2)}s`);
+
+        document.body.appendChild(spark);
+        spark.addEventListener('animationend', () => spark.remove(), { once: true });
+    }
+}
+
+if (funHexButton) {
+    funHexButton.addEventListener('click', () => {
+        funHexClickCount += 1;
+
+        if (funHexClickCount % 3 === 0) {
+            playHexAnimation('spin-fast');
+            emitHexSparks();
+            return;
+        }
+
+        playHexAnimation('spin');
+    });
+}
+
+const lastEditedDate = document.getElementById('last-edited-date');
+
+if (lastEditedDate) {
+    const today = new Date();
+    lastEditedDate.textContent = today.toLocaleDateString('en-AU', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+}

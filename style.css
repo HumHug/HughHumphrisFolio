@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background: #0e0e0e;
     color: #ececff;
     padding-top: 70px;
@@ -93,6 +95,55 @@ header {
     padding: 60px 40px;
 }
 
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contact-form label {
+    font-size: 0.95rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #2e2e38;
+    border-radius: 8px;
+    background: #16161f;
+    color: #ececff;
+    padding: 12px;
+    font: inherit;
+}
+
+.contact-form textarea {
+    resize: vertical;
+    min-height: 130px;
+}
+
+.contact-form button {
+    align-self: flex-start;
+    padding: 10px 18px;
+    border: 1px solid #ececff;
+    border-radius: 8px;
+    background: transparent;
+    color: #ececff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.contact-form button:hover {
+    background: #ececff;
+    color: #0e0e0e;
+}
+
+#contact-status {
+    margin: 4px 0 0;
+    min-height: 1.2em;
+    color: #9dd39a;
+}
+
 .project {
     position: relative;
     width: 100%;
@@ -171,6 +222,10 @@ header {
     overflow-y: auto;
     border-radius: 12px;
     position: relative;
+}
+
+.contact-modal-content {
+    max-width: 640px;
 }
 
 .modal-content h2 {
@@ -310,6 +365,74 @@ body.modal-open {
     line-height: 1.4;
 }
 
+.fun-hex-button {
+    position: fixed;
+    right: 18px;
+    top: 56px;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    padding: 0;
+    background: #fff;
+    clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    z-index: 3500;
+}
+
+.site-footer {
+    width: 100%;
+    padding: 16px 12px 24px;
+    box-sizing: border-box;
+    text-align: center;
+    color: #b9b9c9;
+    font-size: 0.9rem;
+}
+
+.fun-hex-button.spin {
+    animation: hex-spin 0.6s ease;
+}
+
+.fun-hex-button.spin-fast {
+    animation: hex-spin-fast 1.9s cubic-bezier(0.14, 0.78, 0.16, 1);
+}
+
+.fun-spark {
+    position: fixed;
+    width: var(--spark-size, 4px);
+    height: var(--spark-size, 4px);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+    z-index: 3600;
+    animation: spark-burst var(--spark-duration, 1.2s) ease-out forwards;
+}
+
+@keyframes hex-spin {
+    from { transform: rotate(0deg) scale(1); }
+    to { transform: rotate(360deg) scale(1.05); }
+}
+
+@keyframes hex-spin-fast {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(150deg) scale(1.12); }
+    55% { transform: rotate(1260deg) scale(1.25); }
+    78% { transform: rotate(1760deg) scale(1.06); }
+    100% { transform: rotate(1800deg) scale(1); }
+}
+
+@keyframes spark-burst {
+    from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate(var(--dx), var(--dy)) scale(0.3);
+        opacity: 0;
+    }
+}
+
 @media (max-width: 1320px) {
     .grid {
         grid-template-columns: minmax(280px, 900px);
@@ -343,5 +466,9 @@ body.modal-open {
         width: calc(100% - 24px);
         padding: 24px 16px;
     }
-}
 
+    .fun-hex-button {
+        top: 64px;
+        right: 12px;
+    }
+}
