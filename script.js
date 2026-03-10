@@ -303,6 +303,7 @@ if (contactForm && contactStatus && contactNameInput && contactEmailInput && con
 }
 
 const funHexButton = document.getElementById('fun-hex-button');
+const funHello = document.getElementById('fun-hello');
 let funHexClickCount = 0;
 
 function playHexAnimation(className) {
@@ -342,6 +343,13 @@ function emitHexSparks() {
     }
 }
 
+function showFunHello() {
+    if (!funHello) return;
+    funHello.classList.remove('show');
+    void funHello.offsetWidth;
+    funHello.classList.add('show');
+}
+
 if (funHexButton) {
     funHexButton.addEventListener('click', () => {
         funHexClickCount += 1;
@@ -349,6 +357,7 @@ if (funHexButton) {
         if (funHexClickCount % 3 === 0) {
             playHexAnimation('spin-fast');
             emitHexSparks();
+            showFunHello();
             return;
         }
 

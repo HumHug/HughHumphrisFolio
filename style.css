@@ -414,6 +414,25 @@ body.modal-open {
     font-size: 0.9rem;
 }
 
+.fun-hello {
+    position: fixed;
+    right: 12px;
+    top: 20px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: lowercase;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.65);
+}
+
+.fun-hello.show {
+    animation: hello-jump 1.6s ease forwards;
+}
+
 .fun-hex-button.spin {
     animation: hex-spin 0.6s ease;
 }
@@ -458,6 +477,28 @@ body.modal-open {
     }
 }
 
+@keyframes hello-jump {
+    0% {
+        opacity: 0;
+        transform: translateY(8px) scale(0.9);
+    }
+    15% {
+        opacity: 1;
+        transform: translateY(-6px) scale(1.04);
+    }
+    40% {
+        transform: translateY(-2px) scale(1);
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(-8px) scale(1.03);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.96);
+    }
+}
+
 @media (max-width: 1320px) {
     .grid {
         grid-template-columns: minmax(280px, 900px);
@@ -495,5 +536,10 @@ body.modal-open {
     .fun-hex-button {
         top: 64px;
         right: 12px;
+    }
+
+    .fun-hello {
+        top: 28px;
+        right: 10px;
     }
 }
