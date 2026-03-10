@@ -199,6 +199,31 @@ header {
     opacity: 0;
 }
 
+.project-cog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    font-size: 2.6rem;
+    color: #fff;
+    opacity: 0;
+    z-index: 4;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.project-underconstruction:hover .project-cog {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation: cog-spin 1s linear infinite;
+}
+
+@keyframes cog-spin {
+    from { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    to { transform: translate(-50%, -50%) scale(1) rotate(360deg); }
+}
+
 .modal {
     position: fixed;
     inset: 0;
